@@ -1,0 +1,12 @@
+{
+    "+1234567890": [
+        "Hello! How are you?",
+        "I'm fine, thanks!",
+        "Hello! How are you?",
+        "I'm fine, thanks!"
+    ],
+    "+0987654321": [
+        "Hi! This is a different conversation.",
+        "Hi! This is a different conversation."
+    ]
+}
