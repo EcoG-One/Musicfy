@@ -1,5 +1,6 @@
 import os
 from openai import OpenAI
+import json
 
 base_url = "https://api.aimlapi.com/v1"
 
@@ -7,7 +8,7 @@ base_url = "https://api.aimlapi.com/v1"
 api_key = "fdc7e528621d4914bc32586ced14e752"
 
 system_prompt = "You are an AI assistant who knows everything."
-user_prompt = "Create a work out EDM playlist for Spotify with at least 15 songs"
+user_prompt = "Provide a list of 15 slow rock songs suitable for chilling"
 
 api = OpenAI(api_key=api_key, base_url=base_url)
 
@@ -24,10 +25,17 @@ def main():
     )
 
     response = completion.choices[0].message.content
+    print(response)
+'''
 
-    print("User:", user_prompt)
-    print("AI:", response)
-
+    clean_response = response.split('= ')[1]
+    very_clean_response = clean_response.replace("'", '"')
+    playlist = json.loads(very_clean_response)
+    titles = []
+    for song in playlist:
+        titles.append(song['track_name'])
+        print(song['track_name'])
+'''
 
 if __name__ == main():
     main()

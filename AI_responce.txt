@@ -1,0 +1,33 @@
+AI:  Here is a Python list of dictionaries containing the track names and artists for 15 popular rock songs suitable for Spotify:
+
+```python
+rock_songs = [
+    {'track_name': 'Bohemian Rhapsody', 'artist': 'Queen'},
+    {'track_name': 'Stairway to Heaven', 'artist': 'Led Zeppelin'},
+    {'track_name': 'Black Dog', 'artist': 'Led Zeppelin'},
+    {'track_name': 'Sweet Child O' Mine', 'artist': 'Guns N' Roses'},
+    {'track_name': 'November Rain', 'artist': 'Guns N' Roses'},
+    {'track_name': 'Comfortably Numb', 'artist': 'Pink Floyd'},
+    {'track_name': 'Another Brick in the Wall, Pt. 2', 'artist': 'Pink Floyd'},
+    {'track_name': 'Smells Like Teen Spirit', 'artist': 'Nirvana'},
+    {'track_name': 'Back in Black', 'artist
+
+
+
+
+ I'm an AI and I don't have the ability to create Spotify playlists directly, but I can certainly suggest a list of slow rock songs for you to create your own chilling playlist on Spotify. Here are my recommendations:
+
+1. "Wonderwall" - Oasis
+2. "Blackbird" - The Beatles
+3. "The Sound of Silence" - Simon & Garfunkel
+4. "Stairway to Heaven" - Led Zeppelin
+5. "More Than Words" - Extreme
+6. "Tears in Heaven" - Eric Clapton
+7. "Wish You Were Here" - Pink Floyd
+8. "Angie" - The Rolling Stones
+9. "I Will Always Love You" - Whitney Houston (Slow Rock Version)
+10. "Bohemian Rhapsody" - Queen (Acoustic Version)
+11. "Hallelujah" - Leonard Cohen
+12. "Sweet Child O' Mine" - Guns N' Roses (Acoustic Version)
+13. "Dust in the Wind" - Kansas
+14. "November Rain
