@@ -15,8 +15,8 @@ REDIRECT_URI = "http://127.0.0.1:3000"
 SCOPE = 'playlist-modify-public'
 
 # Twilio credentials
-TWILIO_ACCOUNT_SID = "AC49c293106ed989f669933f8d530b5d8a"
-TWILIO_AUTH_TOKEN = "6f7b6c7fa5d4d40fa895b9fcbc7ac299"
+TWILIO_ACCOUNT_SID = os.getenv('TWILIO_ACCOUNT_SID')
+TWILIO_AUTH_TOKEN = os.getenv('TWILIO_AUTH_TOKEN')
 TWILIO_WHATSAPP_NUMBER = "+14155238886"
 YOUR_WHATSAPP_NUMBER = "+4915901299525"
 
@@ -34,7 +34,7 @@ api = OpenAI(api_key=api_key, base_url=base_url)
 # System and user prompts for OpenAI
 system_prompt = "You are an AI assistant who knows everything."
 user_prompt = (
-    "Provide a Python list named 'test_list' containing 15 popular pop songs suitable for Spotify. "
+    "Provide a Python list named 'karaoke_list' containing 15 EDM songs from the 2020s suitable for Spotify. "
     "Each entry should be a list with two elements: the track name and the artist. "
     "Format the output as: rock_list = [['track name', 'artist'], ...]"
 )
