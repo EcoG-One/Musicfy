@@ -6,11 +6,9 @@ from dotenv import load_dotenv
 
 
 load_dotenv()
-# Spotify credentials
-# CLIENT_ID = "cdb650e311964a9e8f748a6b9c0ddbf3"
-# CLIENT_SECRET = "00cf025be06441c687af60181404d9b6"
-CLIENT_ID = os.getenv('CLIENT_ID')
-CLIENT_SECRET = os.getenv('CLIENT_SECRET')
+
+CLIENT_ID = os.getenv('SPOTIFY_CLIENT_ID')
+CLIENT_SECRET = os.getenv('SPOTIFY_CLIENT_SECRET')
 REDIRECT_URI = "http://127.0.0.1:3000"
 SCOPE = 'playlist-modify-public'
 
@@ -33,17 +31,25 @@ user_prompt = (
     "Format the output as: rock_list = [['track name', 'artist'], ...]"
 )
 
-def search_track(track_name):
+def search_podcast(name):
     '''
-    Searches for the Spotify URI of a given track name.
-    :param track_name: a song title
-    :return: the Spotify URI of the track_name
+    Search for a podcast by name
+    :param name: the name of the podcast to search for
+    :return: the podcast uri, None if it is not found
     '''
-    results = sp.search(q=track_name, type='track', limit=1)
-    if results['tracks']['items']:
-        return results['tracks']['items'][0]['uri']
+    query = f'show:{name}'
+    results = sp.search(q=query, type='show', limit=1)
+    if results['shows']['items']:
+        podcast = results['shows']['items'][0]
+        return {
+            'name': podcast['name'],
+            'publisher': podcast['publisher'],
+            'description': podcast['description'],
+            'uri': podcast['uri']
+        }
     else:
         return None
+
 
 def create_track_uris(track_list):
     '''
@@ -53,10 +59,33 @@ def create_track_uris(track_list):
     '''
     track_uris = []
     for track_name in track_list:
-        track = search_track(track_name)
-        if track is not None:
-            track_uris.append(track)
+        song = search_song(track_name)
+        if song is not None:
+            track_uris.append(song['uri'])
     return track_uris
+
+
+def search_song(track_name):
+    '''
+    Search for a song by title and artist
+    :param track_name: a Tuple with the song title and artist
+    :return: a Dictionary with the song name, artist, album and uri,
+                None, if song not found
+    '''
+    title = track_name[0]
+    artist = track_name [1]
+    query = f'track:{title} artist:{artist}'
+    results = sp.search(q=query, type='track', limit=1)
+    if results['tracks']['items']:
+        song = results['tracks']['items'][0]
+        return {
+            'name': song['name'],
+            'artist': song['artists'][0]['name'],
+            'album': song['album']['name'],
+            'uri': song['uri']
+        }
+    else:
+        return None
 
 def transfer_to_spotify(playlist_name, track_uris):
     '''
@@ -102,7 +131,7 @@ def create_playlist_with_mistral_api():
                     track_name, artist = item.split("', '")
                     track_name = track_name.strip("'")
                     artist = artist.strip("'")
-                    playlist_data.append(f"{track_name} by {artist}")
+                    playlist_data.append((track_name, artist))
                 except ValueError:
                     print(f"Skipping item with unexpected format: {item}")
 

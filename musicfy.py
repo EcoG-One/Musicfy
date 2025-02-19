@@ -7,7 +7,7 @@ from dotenv import load_dotenv
 load_dotenv()
 # Set up credentials
 CLIENT_ID = os.getenv('CLIENT_ID')
-CLIENT_SECRET = os.getenv('CLIENT_SECRET')
+CLIENT_SECRET = os.getenv('SPOTIFY_CLIENT_SECRET')
 # Spotify credentials
 # CLIENT_ID = "aa83fbce48084687a171b50465900891"
 # CLIENT_SECRET = "55ef74a61e384628a939aceb8584eec5"
@@ -51,6 +51,21 @@ def search_track(track_name):
     else:
         return None
 
+# Search for a song by title and artist
+def search_song(title, artist):
+    query = f'track:{title} artist:{artist}'
+    results = sp.search(q=query, type='track', limit=1)
+    if results['tracks']['items']:
+        song = results['tracks']['items'][0]
+        return {
+            'name': song['name'],
+            'artist': song['artists'][0]['name'],
+            'album': song['album']['name'],
+            'uri': song['uri']
+        }
+    else:
+        return None
+
 def create_track_uris(track_list):
     '''
     Transforms a song list to a URIs list.
@@ -59,9 +74,9 @@ def create_track_uris(track_list):
     '''
     track_uris = []
     for track_name in track_list:
-        track = search_track(track_name)
+        track = search_song(track_name)
         if track is not None:
-            track_uris.append(track)
+            track_uris.append(track['uri'])
     return track_uris
 
 def transfer_to_spotify(playlist_name, track_uris):
@@ -136,6 +151,8 @@ def send_whatsapp_message(message):
         print(f"WhatsApp message sent successfully! Message SID: {message.sid}")
     except Exception as e:
         print(f"Failed to send WhatsApp message: {e}")
+
+
 
 # Modify the transfer_to_spotify function to return the playlist link
 def transfer_to_spotify(playlist_name, track_uris):

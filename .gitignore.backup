@@ -1,0 +1,14 @@
+# Ignore Python compiled files
+__pycache__/
+*.pyc
+
+# Ignore environment variables
+../Musicfy/.env
+
+# Ignore IDE-specific files
+.idea/
+.vscode/
+
+# Ignore virtual environments
+venv/
+env/

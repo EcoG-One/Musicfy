@@ -3,4 +3,8 @@
   <component name="Black">
     <option name="sdkName" value="Python 3.9 (Musicfy)" />
   </component>
+<<<<<<< HEAD
+=======
+  <component name="ProjectRootManager" version="2" project-jdk-name="Python 3.9 (turtule_training)" project-jdk-type="Python SDK" />
+>>>>>>> fccf6155fef1d3f97f796cf58adf4a97d023e907
 </project>
