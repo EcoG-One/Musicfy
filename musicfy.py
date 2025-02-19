@@ -8,9 +8,6 @@ load_dotenv()
 # Set up credentials
 CLIENT_ID = os.getenv('CLIENT_ID')
 CLIENT_SECRET = os.getenv('SPOTIFY_CLIENT_SECRET')
-# Spotify credentials
-# CLIENT_ID = "aa83fbce48084687a171b50465900891"
-# CLIENT_SECRET = "55ef74a61e384628a939aceb8584eec5"
 REDIRECT_URI = "http://127.0.0.1:3000"
 SCOPE = 'playlist-modify-public'
 
