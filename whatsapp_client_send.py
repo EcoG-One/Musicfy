@@ -32,5 +32,10 @@ def send_whatsapp_message(sender_number, receiver_number, message_body):
         return None
 
 
-message_text = "Hello from Twilio! This is a test message."
+message_text = ("Hello from Musicfy. Tell me what you want to listen. "
+                "Please respond with max four words, describing the music style, "
+                "the mood and optionally the era or the country. \n"
+                "For Example: Pop, happy, Italian \n"
+                "or 80s, dance \n"
+                "or Classic Rock, chill.")
 send_whatsapp_message(from_whatsapp_number, to_whatsapp_number, message_text)

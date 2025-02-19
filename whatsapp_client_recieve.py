@@ -3,6 +3,10 @@ import os
 from dotenv import load_dotenv
 from twilio.rest import Client
 from whatsapp_client_send import send_whatsapp_message
+from save_to_file import save_message
+import json
+
+
 # Load environment variables
 load_dotenv()
 
@@ -39,6 +43,8 @@ def receive_message():
     # Respond based on message content
     if "hello" in incoming_msg.lower():
         response_text = spotify_link
+        save_message(sender, incoming_msg)
+        save_message(sender, response_text)
     elif "weather" in incoming_msg.lower():
         response_text = "Currently, I cannot fetch weather updates, but I'm here to chat!"
     else:
