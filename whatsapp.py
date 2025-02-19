@@ -16,10 +16,10 @@ REDIRECT_URI = "http://127.0.0.1:3000"
 SCOPE = 'playlist-modify-public'
 
 # Twilio credentials
-TWILIO_ACCOUNT_SID = "ACa276eee82417fb4243218ae63eb9d522"
-TWILIO_AUTH_TOKEN = "949e34962a3e80de75b44a56406af6d4"
+TWILIO_ACCOUNT_SID = "ACe79604d9184da5e395e323a315762610"
+TWILIO_AUTH_TOKEN = "c9dbf83c536f146217fd3276e429e2b7"
 TWILIO_WHATSAPP_NUMBER = "+14155238886"
-#YOUR_WHATSAPP_NUMBER = sender
+#YOUR_WHATSAPP_NUMBER = "+4917660771012"
 
 # Authenticate Spotify
 sp = spotipy.Spotify(auth_manager=SpotifyOAuth(client_id=CLIENT_ID,
@@ -71,15 +71,17 @@ def receive_message():
         if track_uris:
             playlist_name = "AI-Generated Playlist"
             playlist_link = transfer_to_spotify(playlist_name, track_uris)
+            print(f"{playlist_link}gewsghwseghw")
             response_text = f"Here's your playlist: {playlist_link}"
             print(sender, response_text)
-            send_whatsapp_message(sender, response_text)  # Corrected line
+            new_number = sender[9:]
+            send_whatsapp_message(new_number, response_text)  # Corrected line
         else:
             response_text = "Sorry, I couldn't create the playlist."
     else:
         response_text = "Please provide valid prompts."
         print(sender, response_text)
-    send_whatsapp_message(sender, response_text)  # Corrected line
+        #send_whatsapp_message(sender, response_text)  # Corrected line
     return "OK", 200
 
 
@@ -202,7 +204,7 @@ def send_whatsapp_message(to_number, message_body):
         message = client.messages.create(
             body=message_body,
             from_=f"whatsapp:{TWILIO_WHATSAPP_NUMBER}",
-            to=to_number
+            to=f"whatsapp:{to_number}",
         )
         print(f"WhatsApp message sent successfully! Message SID: {message.sid, to_number}")
         return message.sid
