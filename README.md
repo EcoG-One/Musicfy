@@ -11,12 +11,12 @@ Log in with your Spotify account.
 Create a new application. Just fill in the form.
 
 Under the "Redirect URIs" field, add your redirect URI. 
-This can be a local URI like http://localhost:8888/callback 
-or http://127.0.0.1:3000 for development purposes.
+This can be a local URI like http://127.0.0.1:3000 for development purposes.
 
 Under the API section, choose the Web API.
 
 After creating the Spotify Developer Application you can get your 
 Client ID and Client Secret from the Dashboard's Basic Information
+Don't forget to log in to Spotify, in order for your token to be created.
 
-Save them on your .env file
+Save your secrets on your .env file
