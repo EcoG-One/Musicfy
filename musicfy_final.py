@@ -7,10 +7,11 @@ from flask import Flask, request
 from spotipy.exceptions import SpotifyException
 from dotenv import load_dotenv
 
-load_dotenv()
 CONVERSATION_FILE = os.path.join(os.path.dirname(__file__), "conversations.json")
+
+load_dotenv()
 # Set up credentials
-CLIENT_ID = os.getenv('SPOTIFY_CLIENT_ID')
+CLIENT_ID = os.getenv('CLIENT_ID')
 CLIENT_SECRET = os.getenv('SPOTIFY_CLIENT_SECRET')
 REDIRECT_URI = "http://127.0.0.1:3000"
 SCOPE = 'playlist-modify-public'
@@ -19,7 +20,6 @@ SCOPE = 'playlist-modify-public'
 TWILIO_ACCOUNT_SID = os.getenv('TWILIO_ACCOUNT_SID')
 TWILIO_AUTH_TOKEN = os.getenv('TWILIO_AUTH_TOKEN')
 TWILIO_WHATSAPP_NUMBER = "+14155238886"
-
 
 # Authenticate Spotify
 sp = spotipy.Spotify(auth_manager=SpotifyOAuth(client_id=CLIENT_ID,
@@ -56,6 +56,20 @@ def receive_message():
         return "⚠️ No message received but connection established ✅", 200
 
     print(f"✅ Received message from {sender}: {incoming_msg}")
+
+    # Check for help or hello
+    msg_lower = incoming_msg.lower().strip()
+    if msg_lower in ["help", "hello"]:
+        tutorial_text = (
+            "Hi! I can create Spotify playlists for you. "
+            "Send 'song <genre>' for a music playlist with 15 songs, "
+            "or 'podcast <topic>' for a podcast playlist with 15 episodes. "
+            "Use as many prompts as you like! e.g song energetic 90s rock"
+        )
+        new_number = sender[9:]
+        send_whatsapp_message(new_number, tutorial_text)
+        print(f"Sent tutorial to {new_number}: {tutorial_text}")
+        return "OK", 200
 
     playlist_type, prompts = process_incoming_message(incoming_msg)
     print(f"Playlist type: {playlist_type}, Prompts: {prompts}")
@@ -126,7 +140,7 @@ def search_podcast(name):
     results = sp.search(q=query, type='show', limit=1)
     if results['shows']['items']:
         show_id = results['shows']['items'][0]['id']
-        episodes = sp.show_episodes(show_id, limit=5)  # Get 5 episodes
+        episodes = sp.show_episodes(show_id, limit=5)  # Get 15 episodes
         return [episode['uri'] for episode in episodes['items'] if 'uri' in episode]
     else:
         return None
@@ -188,6 +202,7 @@ def create_playlist_with_mistral_api(user_prompt, is_podcast=False):
     )
 
     response = completion.choices[0].message.content
+    print(f"Mistral response: {response}")  # Debug log
 
     list_start = response.find('[')
     list_end = response.rfind(']')
@@ -200,7 +215,6 @@ def create_playlist_with_mistral_api(user_prompt, is_podcast=False):
             item = item.strip().strip('[]')
             if item:
                 try:
-                    # Split by the first occurrence of "', '"
                     name, creator = item.split("', '")
                     name = name.strip("'")
                     creator = creator.strip("'")
@@ -208,13 +222,18 @@ def create_playlist_with_mistral_api(user_prompt, is_podcast=False):
                 except ValueError:
                     print(f"Skipping item with unexpected format: {item}")
 
-        # Use different search functions based on the playlist type
         track_uris = []
         if is_podcast:
+            total_limit = 15  # Cap at 15 episodes total
             for name, host in playlist_data:
+                if len(track_uris) >= total_limit:
+                    break
                 episodes = search_podcast(f"{name} {host}")
                 if episodes:
-                    track_uris.extend(episodes)
+                    # Add only enough episodes to reach 15 total
+                    needed = total_limit - len(track_uris)
+                    track_uris.extend(episodes[:needed])
+                    print(f"Added {min(len(episodes), needed)} episodes for {name} by {host}, total now {len(track_uris)}")
                 else:
                     print(f"Could not find episodes for podcast: {name} by {host}")
         else:
