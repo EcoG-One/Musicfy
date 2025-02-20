@@ -28,6 +28,8 @@ Save your secrets on your .env file
 In order for your Flask to go public, you can use a forwarder like ngrok and paste your virtual URL to 
 Twillo's sandbox settings.
 
+For the progrm to run, first start your forwarder and then run the file **musicfy_final.py**
+
 The user must scan the QRcode on your Willo's sandbox page and then send the word 
 songs or
 podcasts or
